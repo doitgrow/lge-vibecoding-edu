@@ -5,6 +5,11 @@
       "type": "remote",
       "url": "https://ax-dev.lge-vs.com/agents/axguide/mcp",
       "enabled": true
+    },
+    "playwright": {
+      "type": "local",
+      "command": ["npx", "@playwright/mcp@latest"],
+      "enabled": true
     }
   }
 }
