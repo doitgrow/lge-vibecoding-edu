@@ -19,13 +19,10 @@
 mcp/
 ├── .env.example
 ├── .gitignore
-├── Dockerfile
 ├── main.py
 ├── pyrightconfig.json
 ├── requirements.txt
 ├── server.py
-├── scripts/
-│   └── coder-init.sh
 ├── tools/
 │   ├── __init__.py
 │   ├── calculator.py
@@ -246,142 +243,6 @@ def summarize(text: str) -> str:
 def translate(text: str, target_language: str = "영어") -> str:
     """텍스트를 번역하는 프롬프트를 생성합니다."""
     return f"다음 텍스트를 {target_language}로 번역해주세요:\n\n{text}"
-```
-
-### `Dockerfile`
-
-```dockerfile
-FROM python:3.12-slim
-
-USER root
-RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    wget \
-    ca-certificates \
-    procps \
-    bash \
-    sudo \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN useradd -m -s /bin/bash coder && \
-    echo "coder ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && \
-    mkdir -p /workspaces && \
-    chown -R coder:coder /workspaces
-
-RUN mkdir -p /opt/workspace-template
-COPY --chown=coder:coder . /opt/workspace-template/mcp
-
-RUN python3 -m venv /workspaces/.venv/mcp && \
-    /workspaces/.venv/mcp/bin/pip install --no-cache-dir -r /opt/workspace-template/mcp/requirements.txt && \
-    tar cf /opt/workspace-template/venv.tar -C /workspaces .venv/mcp && \
-    rm -rf /workspaces/.venv
-
-ARG IMAGE_TAG=latest
-RUN echo "${IMAGE_TAG}" > /opt/workspace-template/.image-tag
-
-RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --method=standalone --prefix=/tmp/code-server
-
-USER coder
-RUN /tmp/code-server/bin/code-server --install-extension ms-python.python
-USER root
-
-ENV REPO_NAME=mcp
-COPY scripts/coder-init.sh /tmp/coder-init.sh
-RUN chmod +x /tmp/coder-init.sh
-
-USER coder
-WORKDIR /workspaces
-
-ENTRYPOINT ["/tmp/coder-init.sh"]
-```
-
-### `scripts/coder-init.sh`
-
-```bash
-#!/bin/bash
-set -e
-
-if [ ! -d "/workspaces/${REPO_NAME}" ]; then
-  cp -r "/opt/workspace-template/${REPO_NAME}" /workspaces/
-fi
-
-VENV_PATH="/workspaces/.venv/${REPO_NAME}"
-REQ_FILE="/opt/workspace-template/${REPO_NAME}/requirements.txt"
-IMAGE_TAG_FILE="/opt/workspace-template/.image-tag"
-VENV_TAG_FILE="${VENV_PATH}/.image-tag"
-
-if [ ! -d "$VENV_PATH" ]; then
-  mkdir -p "$(dirname "$VENV_PATH")"
-  if [ -f /opt/workspace-template/venv.tar ]; then
-    tar xf /opt/workspace-template/venv.tar -C /workspaces
-  else
-    python3 -m venv "$VENV_PATH"
-    "$VENV_PATH/bin/pip" install --no-cache-dir -r "$REQ_FILE"
-  fi
-fi
-
-if [ -f "$IMAGE_TAG_FILE" ]; then
-  mkdir -p "$VENV_PATH"
-  cp "$IMAGE_TAG_FILE" "$VENV_TAG_FILE" || true
-fi
-
-export VIRTUAL_ENV="$VENV_PATH"
-export PATH="$VENV_PATH/bin:$PATH"
-export PIP_CACHE_DIR="/workspaces/.pip-cache"
-mkdir -p "$PIP_CACHE_DIR"
-
-if [ ! -f /workspaces/.bashrc ]; then
-  touch /workspaces/.bashrc
-fi
-
-if ! grep -q "VIRTUAL_ENV=\"/workspaces/.venv/${REPO_NAME}\"" /workspaces/.bashrc 2>/dev/null; then
-  {
-    echo "export VIRTUAL_ENV=\"/workspaces/.venv/${REPO_NAME}\""
-    echo "export PATH=\"/workspaces/.venv/${REPO_NAME}/bin:\$PATH\""
-    echo "export PIP_CACHE_DIR=\"/workspaces/.pip-cache\""
-  } >> /workspaces/.bashrc
-fi
-
-if [ -f /home/coder/.bashrc ]; then
-  if ! grep -q "source /workspaces/.bashrc" /home/coder/.bashrc 2>/dev/null && ! grep -q "\. /workspaces/.bashrc" /home/coder/.bashrc 2>/dev/null; then
-    {
-      echo "if [ -f /workspaces/.bashrc ]; then"
-      echo "  source /workspaces/.bashrc"
-      echo "fi"
-    } >> /home/coder/.bashrc
-  fi
-fi
-
-if [ -z "$CODER_AGENT_URL" ] || [ -z "$CODER_AGENT_TOKEN" ]; then
-  sleep infinity
-fi
-
-BINARY_DIR="/tmp/coder"
-BINARY_NAME="coder"
-mkdir -p "$BINARY_DIR"
-cd "$BINARY_DIR"
-
-BINARY_URL="${CODER_AGENT_URL}/bin/coder-linux-amd64"
-
-MAX_RETRIES=5
-RETRY_COUNT=0
-while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
-  if curl -fsSL "$BINARY_URL" -o "$BINARY_NAME"; then
-    break
-  fi
-
-  RETRY_COUNT=$((RETRY_COUNT + 1))
-  if [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
-    sleep 5
-  else
-    sleep infinity
-  fi
-done
-
-chmod +x "$BINARY_NAME"
-export CODER_AGENT_AUTH="token"
-exec ./$BINARY_NAME agent
 ```
 
 ---
