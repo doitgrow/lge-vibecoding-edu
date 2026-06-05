@@ -2,12 +2,6 @@
 name: designer
 description: "시장 분석 리포트의 시각적 구조를 설계하는 디자인 에이전트. 레이아웃설계, 리포트디자인, 시각화, 인포그래픽 시 사용됩니다."
 mode: subagent
-model: amazon-bedrock/global.anthropic.claude-sonnet-4-6
-permission:
-  read: allow
-  edit: allow
-  glob: allow
-  grep: allow
 ---
 
 # 역할 정의

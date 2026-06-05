@@ -2,13 +2,6 @@
 name: manager
 description: "자동차 B2B 영업 시장 분석 총괄 매니저. 리서치-리뷰-디자인-HTML 파이프라인을 오케스트레이션합니다. 시장분석, B2B영업, 자동차뉴스, 주간리포트, 영업브리핑 시 사용됩니다."
 mode: primary
-model: amazon-bedrock/global.anthropic.claude-sonnet-4-6
-permission:
-  bash: allow
-  read: allow
-  edit: allow
-  glob: allow
-  grep: allow
 ---
 
 # 역할 정의

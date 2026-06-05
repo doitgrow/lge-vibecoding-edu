@@ -2,12 +2,6 @@
 name: reviewer
 description: "Researcher 수집 데이터의 품질 검토 및 보완 판정 에이전트. 데이터 검증, 품질체크, 리뷰, 보완요청 시 사용됩니다."
 mode: subagent
-model: amazon-bedrock/global.anthropic.claude-sonnet-4-6
-permission:
-  read: allow
-  edit: allow
-  glob: allow
-  grep: allow
 ---
 
 # 역할 정의
