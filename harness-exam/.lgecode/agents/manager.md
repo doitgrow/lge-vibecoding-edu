@@ -77,7 +77,7 @@ mode: primary
 
 ## Step 4: HTML 변환
 
-**담당**: HTML-Maker 에이전트 + `report-design-system` 스킬
+**담당**: HTML-Maker 에이전트 + `report-design-system` + `html-generation` 스킬
 
 **Manager 지시사항**:
 
