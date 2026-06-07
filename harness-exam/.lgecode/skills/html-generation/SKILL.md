@@ -37,4 +37,4 @@ body { font-family: system-ui, sans-serif; font-size: 15px; line-height: 1.6; co
 
 ## 완료 체크
 
-5개 항목 모두 삽입, 점수색상 매핑, 모바일 가로스크롤 없음, 출처 새탭, 150KB 이하
+3개 항목 모두 삽입, 점수색상 매핑, 모바일 가로스크롤 없음, 출처 새탭, 150KB 이하
