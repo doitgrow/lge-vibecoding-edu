@@ -2,6 +2,10 @@
 name: designer
 description: "시장 분석 리포트의 시각적 구조를 설계하는 디자인 에이전트. 레이아웃설계, 리포트디자인, 시각화, 인포그래픽 시 사용됩니다."
 mode: subagent
+permission:
+  edit: allow
+  write: allow
+  read: allow
 ---
 
 # 역할

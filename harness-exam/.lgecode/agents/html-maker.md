@@ -2,7 +2,10 @@
 name: html-maker
 description: "Designer의 레이아웃 설계를 실제 HTML/CSS 코드로 변환하는 에이전트. HTML변환, 코딩, 웹페이지생성, 리포트코딩 시 사용됩니다."
 mode: subagent
-model: amazon-bedrock/global.anthropic.claude-sonnet-4-6
+permission:
+  edit: allow
+  write: allow
+  read: allow
 ---
 
 # 역할

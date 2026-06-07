@@ -2,6 +2,10 @@
 name: researcher
 description: "자동차 B2B 영업 시장/뉴스 데이터 수집 및 신뢰도 기반 선별 에이전트. 시장조사, 뉴스수집, 트렌드분석, 경쟁사분석 시 사용됩니다."
 mode: all
+permission:
+  edit: allow
+  write: allow
+  read: allow
 ---
 
 # 역할
