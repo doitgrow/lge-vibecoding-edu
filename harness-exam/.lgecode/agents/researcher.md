@@ -4,6 +4,8 @@ description: "자동차 B2B 영업 시장/뉴스 데이터 수집 및 신뢰도 
 mode: subagent
 model: amazon-bedrock/global.anthropic.claude-sonnet-4-6
 permission:
+  edit: allow
+  write: allow
   read: allow
 ---
 

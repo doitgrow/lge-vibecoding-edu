@@ -4,7 +4,9 @@ description: "Designer의 레이아웃 설계를 실제 HTML/CSS 코드로 변�
 mode: subagent
 model: amazon-bedrock/global.anthropic.claude-sonnet-4-6
 permission:
+  edit: allow
   write: allow
+  read: allow
 ---
 
 # 역할

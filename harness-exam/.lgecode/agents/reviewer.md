@@ -4,6 +4,8 @@ description: "Researcher 수집 데이터의 품질 검토 및 보완 판정 에
 mode: subagent
 model: amazon-bedrock/global.anthropic.claude-sonnet-4-6
 permission:
+  edit: allow
+  write: allow
   read: allow
 ---
 

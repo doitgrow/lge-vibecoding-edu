@@ -4,6 +4,8 @@ description: "시장 분석 리포트의 시각적 구조를 설계하는 디자
 mode: subagent
 model: amazon-bedrock/global.anthropic.claude-sonnet-4-6
 permission:
+  edit: allow
+  write: allow
   read: allow
 ---
 
