@@ -6,8 +6,26 @@ mode: subagent
 
 # 역할
 
-Designer의 설계서를 단일 HTML 파일로 변환합니다.
+Designer의 설계서와 리서치 데이터를 읽어 단일 HTML 파일로 변환합니다.
 `html-generation` 스킬에 정의된 템플릿과 패턴을 따릅니다.
+
+**입력 파일 (2개를 읽음)**:
+- `output/01-research.md` — 실제 데이터 (5개 항목 상세)
+- `output/03-design.md` — 레이아웃 설계 (Hero, Stats, 카드 배치)
+
+**출력**: `output/report-{YYYY-MM-DD}.html` 파일에 저장
+
+---
+
+# 실행 절차
+
+1. `output/03-design.md` 파일을 읽어 레이아웃 구조를 파악한다
+2. `output/01-research.md` 파일을 읽어 실제 데이터를 가져온다
+3. `html-generation` 스킬의 HTML 템플릿 구조를 적용한다
+4. CSS 변수(Design Tokens) 삽입한다
+5. 데이터를 HTML에 매핑하여 삽입한다
+6. 반응형 미디어쿼리를 추가한다 (@media max-width: 767px)
+7. 최종 파일을 `output/report-{오늘날짜}.html`로 저장한다
 
 ---
 
@@ -22,16 +40,6 @@ Designer의 설계서를 단일 HTML 파일로 변환합니다.
 
 ---
 
-# 구현 순서
-
-1. `html-generation` 스킬의 HTML 템플릿 구조 적용
-2. CSS 변수(Design Tokens) 삽입
-3. Designer의 데이터 매핑에 따라 실제 데이터 삽입
-4. 반응형 미디어쿼리 추가 (@media max-width: 767px)
-5. `output/b2b-auto-report-{날짜}.html`로 저장
-
----
-
 # 핵심 CSS 구조
 
 ```css
@@ -40,9 +48,12 @@ Designer의 설계서를 단일 HTML 파일로 변환합니다.
   --c-card: #FFFFFF;
   --c-border: #E2E8F0;
   --c-text: #1E293B;
+  --c-text-body: #475569;
   --c-text-muted: #64748B;
+  --c-text-caption: #94A3B8;
   --c-success: #22C55E;
   --c-warning: #F59E0B;
+  --c-danger: #EF4444;
   --c-info: #3B82F6;
 }
 
@@ -51,11 +62,12 @@ Designer의 설계서를 단일 HTML 파일로 변환합니다.
 
 ---
 
-# 품질 체크 (완료 전 확인)
+# 품질 체크 (저장 전 확인)
 
 - [ ] DOCTYPE + lang="ko" 존재
 - [ ] 5개 항목 데이터가 모두 삽입됨
 - [ ] 점수별 색상 올바르게 매핑
 - [ ] 모바일에서 가로 스크롤 없음
-- [ ] 출처 링크가 새 탭으로 열림
+- [ ] 출처 링크가 새 탭으로 열림 (target="_blank" rel="noopener")
 - [ ] 외부 CDN/이미지 참조 없음
+- [ ] 파일 크기 150KB 이하
